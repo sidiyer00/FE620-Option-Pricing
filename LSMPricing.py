@@ -12,9 +12,13 @@ def lsm_pricer(OP_TYPE, N, S0, K, r, sig, T, discrete_freq, POLY_DEGREE):
     discount_factor = np.exp(-r * dt)
     
     payoff_matrix = None
-    if OP_TYPE == "put":
+    if OP_TYPE == "ec":
+        return np.exp(-r*T)*np.average(np.maximum(sims[:,-1] - K, 0))
+    elif OP_TYPE == "ep":
+        return np.exp(-r*T)*np.average(np.maximum(K - sims[:,-1], 0))
+    elif OP_TYPE == "ap":
         payoff_matrix = np.maximum(K - sims, np.zeros_like(sims))
-    elif OP_TYPE == "call":
+    elif OP_TYPE == "ac":
         payoff_matrix = np.maximum(sims - K, np.zeros_like(sims))
 
     value_matrix = np.zeros_like(payoff_matrix)
